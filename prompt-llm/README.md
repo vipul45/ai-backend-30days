@@ -83,4 +83,4 @@ curl -X POST http://localhost:3000/generate \
 | `PORT` | Server port (default: 3000) | No |
 
 ## Author
-Vipul Kumar Jha — [GitHub](https://github.com/vipul45) · [LinkedIn](https://linkedin.com/in/vipul-kumar-jha)
+Vipul Kumar Jha — [GitHub](https://github.com/vipul45) · [LinkedIn](https://www.linkedin.com/in/vipul-kumar-jha-56a0661b7/)
