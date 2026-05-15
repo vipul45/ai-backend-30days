@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import pkg from 'express';
-const {json} = pkg;
+const { json } = pkg;
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -11,7 +11,7 @@ app.use(json());
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY as string);
 const getModels = async (): Promise<string[]> => {
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${process.env.GOOGLE_API_KEY}`);
-    const data = await res.json() as { models: { name: string }[] };    
+    const data = await res.json() as { models: { name: string }[] };
     return data.models.map((m) => m.name.replace('models/', ''));
 }
 
@@ -26,9 +26,13 @@ app.get('/models', async (req: Request, res: Response) => {
 });
 app.post('/generate', async (req: Request, res: Response) => {
     try {
-        const { prompt, model : modelName } = req.body;
+        const { prompt, model: modelName, systemInstruction, temperature } = req.body;
         const selectModel = modelName || (await getModels())[0];
-        const model = genAI.getGenerativeModel({ model: selectModel });
+        const model = genAI.getGenerativeModel({ 
+            model: selectModel, 
+            systemInstruction: systemInstruction || 'You are a helpful assistant. ', 
+            generationConfig: { temperature } 
+        });
         const result = await model.generateContent(prompt);
         res.json({ response: result.response.text() });
     } catch (error) {
